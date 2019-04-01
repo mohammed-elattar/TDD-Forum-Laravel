@@ -67,9 +67,10 @@ class CreateThreadsTest extends TestCase
       ->assertSessionHasErrors('channel_id');
   }
 
-  /**
-   * @param $overrides array
-   */
+    /**
+     * @param $overrides
+     * @return \Illuminate\Foundation\Testing\TestResponse
+     */
   public function publishThread($overrides)
   {
     $this->signIn();
