@@ -99,14 +99,18 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param $channel
+     * @param Thread $thread
+     * @throws \Exception
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel, Thread $thread)
     {
-        //
+        $thread->delete();
+if(request()->wantsJson()){
+    return response([],204);
+}
+return redirect('/threads');
+
     }
 
     /**
@@ -120,7 +124,6 @@ class ThreadsController extends Controller
         if ($channel->exists) {
             $threads = Thread::where('channel_id', $channel->id);
         }
-        $threads = $threads->get();
-        return $threads;
+        return $threads = $threads->get();
     }
 }
