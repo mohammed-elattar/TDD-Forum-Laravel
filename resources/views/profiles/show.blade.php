@@ -14,7 +14,8 @@
                     <span class="flex">
                             <a href="{{route('profile',$profileUser->name)}}">
                                 {{$profileUser->name}}
-                            </a> posted : {{$thread->title}}
+                            </a> posted :
+                        <a href="{{$thread->path()}}">{{$thread->title}}</a>
                     </span>
                                 <span class="body">{{$profileUser->created_at->diffForhumans()}}</span>
                             </div>

@@ -22,7 +22,7 @@ class ThreadsController extends Controller
     public function index(Channel $channel, ThreadFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
-        if(request()->wantsJson()){
+        if (request()->wantsJson()) {
             return $threads;
         }
         return view("threads.index", compact("threads"));
@@ -70,9 +70,9 @@ class ThreadsController extends Controller
     public function show($channelId, Thread $thread)
     {
         return view("threads.show",
-            ["thread"=>$thread,
-             "replies"=>$thread->replies()->paginate(20)
-        ]);
+            ["thread" => $thread,
+                "replies" => $thread->replies()->paginate(20)
+            ]);
     }
 
     /**
@@ -101,15 +101,17 @@ class ThreadsController extends Controller
     /**
      * @param $channel
      * @param Thread $thread
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      * @throws \Exception
      */
     public function destroy($channel, Thread $thread)
     {
+        $this->authorize('update',$thread);
         $thread->delete();
-if(request()->wantsJson()){
-    return response([],204);
-}
-return redirect('/threads');
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+        return redirect('/threads');
 
     }
 
