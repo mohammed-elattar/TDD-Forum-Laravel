@@ -30,7 +30,6 @@
             hide(){
                 setTimeout(() => {
                     this.show = false
-                    console.log(this.show);
                 }, 3000);
             }
         }

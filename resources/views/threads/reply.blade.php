@@ -7,15 +7,11 @@
                         {{$reply->owner->name}}</a> said
                     {{$reply->created_at->diffForHumans()}}
                 </h5>
-                <div>
-                    <form action="/replies/{{$reply->id}}/favourites" method="post">
-                        {{csrf_field()}}
-                        <button type="submit"
-                                class="btn btn-outline-secondary" {{$reply->isFavourited()?'disabled':''}}>
-                            {{$reply->favourites_count}} {{str_plural('favourite',$reply->favourites_count)}}
-                        </button>
-                    </form>
-                </div>
+                @if(auth()->check())
+                    <div>
+                        <favourite :reply="{{$reply}}"></favourite>
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -35,11 +31,6 @@
             <div class="card-footer level">
                 <button class="btn btn-outline-secondary btn-sm mr-1" @click="editing=true">Edit</button>
                 <button class="btn btn-danger btn-sm mr-1" @click="destroy">Delete</button>
-                {{--<form method="post" action="replies/{{$reply->id}}">--}}
-                    {{--{{ csrf_field() }}--}}
-                    {{--{{method_field('DELETE')}}--}}
-                    {{--<button type="submit" class="btn btn-danger btn-sm">Delete</button>--}}
-                {{--</form>--}}
             </div>
         @endcan
     </div>
