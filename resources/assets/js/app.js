@@ -7,15 +7,16 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import Flash from './components/Flash.vue';
+import Reply from './components/Reply.vue';
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('flash', Flash);
+Vue.component('reply', Reply);
 
 const app = new Vue({
     el: '#app'

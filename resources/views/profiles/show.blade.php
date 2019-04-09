@@ -7,28 +7,15 @@
                     {{$profileUser->name}}
                     <small>Since {{$profileUser->created_at->diffForHumans()}}</small>
                 </h1>
-                @foreach($threads as $thread)
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <div class="level">
-                    <span class="flex">
-                            <a href="{{route('profile',$profileUser->name)}}">
-                                {{$profileUser->name}}
-                            </a> posted :
-                        <a href="{{$thread->path()}}">{{$thread->title}}</a>
-                    </span>
-                                <span class="body">{{$profileUser->created_at->diffForhumans()}}</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <article>
-                                <div class="body">{{$thread->body}}</div>
-                            </article>
-                            <hr>
-                        </div>
-                    </div>
+                @foreach($activites as $date => $activity)
+                    <h3>{{$date}}</h3>
+                    @foreach($activity as $record)
+{{--                        @if(view()->exists("profiles.activities{$record->type}"))--}}
+                            @include("profiles.activities.{$record->type}",['activity'=>$record])
+                        {{--@endif--}}
+                    @endforeach
                 @endforeach
-                {{$threads->links()}}
+                {{--                {{$activitys->links()}}--}}
             </div>
         </div>
     </div>
