@@ -19,18 +19,28 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script>
+        window.App ={!! json_encode ([
+        'signedIn'=>auth()->check(),
+        'user'=>auth()->user(),
+        ]) !!};
+    </script>
     <style>
-        body{
+        body {
             padding-bottom: 100px
         }
-        .level{
+
+        .level {
             display: flex;
             align-items: center;
         }
-        .flex{
-            flex:1;
+
+        .flex {
+            flex: 1;
+            bootstrap
         }
-        [v-cloak]{
+
+        [v-cloak] {
             display: none;
         }
     </style>
@@ -42,7 +52,7 @@
         @yield('content')
     </main>
 
-    <flash message = "{{session('flash')}}"></flash>
+    <flash message="{{session('flash')}}"></flash>
 
 </div>
 

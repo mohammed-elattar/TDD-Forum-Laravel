@@ -13,10 +13,10 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import Flash from './components/Flash.vue';
-import Reply from './components/Reply.vue';
+import Thread from './pages/Thread.vue';
 
 Vue.component('flash', Flash);
-Vue.component('reply', Reply);
+Vue.component('thread-view', Thread);
 
 const app = new Vue({
     el: '#app'

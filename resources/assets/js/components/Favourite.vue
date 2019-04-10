@@ -7,6 +7,7 @@
 
 <script>
     export default {
+        name:'favourite',
         props: ['reply'],
         data() {
             return {

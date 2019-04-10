@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
@@ -12,7 +11,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) {
+}
 
 window.Vue = require('vue');
 
@@ -45,8 +45,11 @@ if (token) {
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
-
+window.Vue.prototype.authorize = function (handler) {
+    let user = window.App.user;
+    return user ? handler(user) : false;
+};
 window.events = new Vue();
-window.flash = function(message){
-window.events.$emit('flash',message);
+window.flash = function (message) {
+    window.events.$emit('flash', message);
 };
