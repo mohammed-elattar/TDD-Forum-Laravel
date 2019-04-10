@@ -7,7 +7,7 @@
                     {{$profileUser->name}}
                     <small>Since {{$profileUser->created_at->diffForHumans()}}</small>
                 </h1>
-                @forelse()$activites as $date => $activity)
+                @forelse($activites as $date => $activity)
                 <h3>{{$date}}</h3>
                 @foreach($activity as $record)
                     {{--                        @if(view()->exists("profiles.activities{$record->type}"))--}}
