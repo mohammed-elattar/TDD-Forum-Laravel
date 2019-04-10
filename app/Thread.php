@@ -40,7 +40,8 @@ class Thread extends Model
 
     public function addReply($reply)
     {
-        $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+        return $reply;
     }
 
     public function Channel()

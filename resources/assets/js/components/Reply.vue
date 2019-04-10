@@ -37,7 +37,6 @@
     import Favourite from './Favourite.vue';
 
     export default {
-        name: 'reply',
         components: {
             Favourite
         },

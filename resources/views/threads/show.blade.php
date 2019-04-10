@@ -33,23 +33,9 @@
                     </div>
 
                     {{--{{$replies->links()}}--}}
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
-                    @if(auth()->check())
-
-                        <form method="post" action="{{$thread->path()."/replies"}}" class="mt-4">
-                            {{csrf_field()}}
-                            <div class="form-group">
-                            <textarea class="form-control" placeholder="Have something to say?" rows="5"
-                                      name="body"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-                    @else
-                        <p class="text-center text-dark">Please <a href="{{route("login")}}">Sign In</a> to be able to
-                            participate in the forum</p>
-                    @endif
-
-
+                    <replies :data="{{ $thread->replies }}"
+                             @added="repliesCount++"
+                             @removed="repliesCount--"></replies>
                 </div>
                 <div class="col-md-4">
                     <div class="card">
