@@ -58,7 +58,7 @@ class ThreadsController extends Controller
             'body' => $request->body,
         ]);
 
-        return redirect($thread->path())->with('flash','your thread has been published !
+        return redirect($thread->path())->with('flash', 'your thread has been published !
         ');
     }
 
@@ -70,10 +70,7 @@ class ThreadsController extends Controller
      */
     public function show($channelId, Thread $thread)
     {
-        return view("threads.show",
-            ["thread" => $thread,
-                "replies" => $thread->replies()->paginate(20)
-            ]);
+        return view("threads.show", compact('thread'));
     }
 
     /**
@@ -107,7 +104,7 @@ class ThreadsController extends Controller
      */
     public function destroy($channel, Thread $thread)
     {
-        $this->authorize('update',$thread);
+        $this->authorize('update', $thread);
         $thread->delete();
         if (request()->wantsJson()) {
             return response([], 204);

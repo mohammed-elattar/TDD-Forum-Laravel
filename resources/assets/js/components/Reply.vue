@@ -5,7 +5,7 @@
                 <h5 class="flex">
                     <a :href="'/profiles/' + data.owner.name" v-text="data.owner.name">
                         </a> said
-                    {{data.created_at}} ...
+                    <span v-text="ago"></span>
                 </h5>
                 <div v-if="signedIn">
                     <favourite :reply="data"></favourite>
@@ -35,7 +35,7 @@
 </template>
 <script>
     import Favourite from './Favourite.vue';
-
+    import moment from 'moment';
     export default {
         components: {
             Favourite
@@ -54,6 +54,9 @@
           },
             canUpdate(){
               return this.authorize(user=>this.data.user_id == user.id);
+            },
+            ago(){
+              return moment(this.data.created_at).fromNow()+'...';
             }
         },
         methods: {
@@ -62,7 +65,7 @@
                     body: this.body
                 });
                 this.editing = false;
-                flash('Updated !');
+                flash('Updatmoment;ed !');
             },
             destroy() {
                 axios.delete('/replies/' + this.data.id);
