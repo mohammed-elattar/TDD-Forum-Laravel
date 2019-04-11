@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Notifications\ThreadWasUpdated;
 
 class Thread extends Model
 {
@@ -23,6 +24,8 @@ class Thread extends Model
 
     }
 
+    protected $appends = ['isSubscribedTo'];
+
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->id}";
@@ -41,7 +44,12 @@ class Thread extends Model
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
-//        $this->increment('replies_count');
+        $this->subscriptions->filter(function ($sub) use ($reply) {
+            return $sub->user_id != $reply->user_id;
+        })->each->notify($reply);
+//            ->each(function ($sub) use ($reply) {
+//            $sub->notify($reply);
+//        });
         return $reply;
     }
 
@@ -60,6 +68,7 @@ class Thread extends Model
         $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id()
         ]);
+        return $this;
     }
 
     public function unsubscribe($userId = null)
@@ -70,5 +79,12 @@ class Thread extends Model
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
+    }
+
+    public function getisSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 }

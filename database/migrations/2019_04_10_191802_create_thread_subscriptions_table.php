@@ -18,6 +18,7 @@ class CreateThreadSubscriptionsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedInteger('thread_id');
             $table->timestamps();
+            $table->unique(['user_id','thread_id']);
             $table->foreign('thread_id')
                 ->references('id')
                 ->on('threads')
@@ -32,6 +33,6 @@ class CreateThreadSubscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('thread_subscriptions');
     }
 }

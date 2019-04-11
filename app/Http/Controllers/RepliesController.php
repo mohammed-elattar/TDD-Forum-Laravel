@@ -33,7 +33,6 @@ class RepliesController extends Controller
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
-
         if (request()->expectsJson()) {
             return $reply->load('owner');
         }
