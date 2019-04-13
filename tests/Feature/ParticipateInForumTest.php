@@ -36,8 +36,8 @@ class ParticipateInForumTest extends TestCase
         $this->post($thread->path() . "/replies", $reply->toArray());
 
 //        $this->get($thread->path())->assertSee($reply->body);
-        $this->assertDatabaseHas('replies',['body'=>$reply->body]);
-        $this->assertEquals(1,$thread->refresh()->replies_count);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
+        $this->assertEquals(1, $thread->refresh()->replies_count);
     }
 
     /**
@@ -76,7 +76,7 @@ class ParticipateInForumTest extends TestCase
         $this->delete('replies/' . $reply->id)
             ->assertStatus(302);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
-        $this->assertEquals(0,$reply->thread->fresh()->replies_count);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
     }
 
     /**
@@ -104,5 +104,20 @@ class ParticipateInForumTest extends TestCase
         $updatedBody = 'you been changed , fool.';
         $this->patch("/replies/{$reply->id}", ['body' => $updatedBody]);
         $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedBody]);
+    }
+
+    /**
+     * @test
+     */
+    public function replies_that_contain_spam_may_not_be_created()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+        $thread = create('App\Thread');
+        $this->expectException('Exception');
+        $this->post($thread->path().'/replies',[
+            'body' => 'Yahoo Customer Support'
+        ]);
+
     }
 }
