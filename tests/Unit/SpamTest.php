@@ -29,5 +29,4 @@ class SpamTest extends TestCase
         $spam->detect('Hello world aaaaaaaaa');
     }
 
-
 }

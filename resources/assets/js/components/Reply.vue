@@ -16,11 +16,13 @@
         <div class="card-body">
             <article>
                 <div v-if="editing">
+                    <form @submit="update">
                     <div class="form-group mt-2">
-                        <textarea class="form-control" v-model="body"></textarea>
+                        <textarea class="form-control" v-model="body" required></textarea>
                     </div>
-                    <button class="btn btn-primary" @click="update">update</button>
-                    <button class="btn btn-link" @click="editing=false">Cancel</button>
+                    <button class="btn btn-primary">update</button>
+                    <button class="btn btn-link" @click="editing=false" type="button">Cancel</button>
+                    </form>
                 </div>
                 <div class="body" v-else v-text="body"></div>
             </article>
@@ -63,9 +65,9 @@
             update() {
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body
-                });
+                }).catch(error=>flash(error.response.data,'danger'));
                 this.editing = false;
-                flash('Updatmoment;ed !');
+                flash('Updated successfully!');
             },
             destroy() {
                 axios.delete('/replies/' + this.data.id);

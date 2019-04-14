@@ -48,4 +48,8 @@ class User extends Authenticatable
         $key = $this->visitedThreadCacheKey($thread);
         cache()->forever($key,\Carbon\Carbon::now());
     }
+
+    public function lastReply(){
+        return $this->hasOne(Reply::class)->latest()->first();
+    }
 }

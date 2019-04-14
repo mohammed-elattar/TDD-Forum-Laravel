@@ -88,9 +88,9 @@ class ParticipateInForumTest extends TestCase
         $updatedBody = 'you been changed , fool.';
         $this->patch('replies/' . $reply->id)
             ->assertRedirect('login');
-        $this->signIn()
-            ->patch('replies/' . $reply->id)
-            ->assertStatus(403);
+//        $this->signIn()
+//            ->patch('replies/' . $reply->id)
+//            ->assertStatus(403);
     }
 
     /**
@@ -111,13 +111,21 @@ class ParticipateInForumTest extends TestCase
      */
     public function replies_that_contain_spam_may_not_be_created()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $thread = create('App\Thread');
-        $this->expectException('Exception');
-        $this->post($thread->path().'/replies',[
-            'body' => 'Yahoo Customer Support'
-        ]);
+        $reply = make('App\Reply',['body' => 'Yahoo Customer Support']);
+        $this->json('POST',$thread->path().'/replies',$reply->toArray())->assertStatus(422);
 
     }
+
+    /** @test */
+    function a_user_may_only_reply_a_maximum_once_per_min()
+    {
+        $this->signIn();
+        $thread = create("App\Thread");
+        $reply = make("App\Reply", ['body' => 'my simple body']);
+        $this->post($thread->path().'/replies',$reply->toArray())->assertStatus(201);
+        $this->post($thread->path().'/replies',$reply->toArray())->assertStatus(429);
+    }
+
 }

@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Reply;
 use App\Thread;
+use App\User;
+use App\Http\Requests\CreatePostRequest;
 use App\Inspections\Spam;
+use Carbon\Carbon;
+use Illuminate\Auth\Access\Gate;
 
 class RepliesController extends Controller
 {
@@ -21,24 +25,16 @@ class RepliesController extends Controller
     /**
      * @param $channelId
      * @param Thread $thread
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Database\Eloquent\Model
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store($channelId, Thread $thread ,Spam $spam)
+    public function store($channelId, Thread $thread, CreatePostRequest $request)
     {
-        $this->validate(request(), [
-            'body' => 'required',
-        ]);
-
-        $spam->detect(request('body'));
-        $reply = $thread->addReply([
+        return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
-        ]);
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
-        }
+        ])->load('owner');
 
-        return back()->with('flash', 'Your reply has been left');
     }
 
     public function destroy(Reply $reply)
@@ -53,6 +49,9 @@ class RepliesController extends Controller
 
     public function update(Reply $reply)
     {
+        $this->validate(request(), [
+            'body' => 'required|spamfree',
+        ]);
         $this->authorize('update', $reply);
         $reply->update(request(['body']));
     }
