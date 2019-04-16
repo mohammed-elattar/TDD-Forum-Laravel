@@ -13,6 +13,7 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import Flash from './components/Flash.vue';
+import AvatarForm from './components/AvatarForm.vue';
 import UserNotifications from './components/UserNotifications.vue';
 import Paginator from './components/Paginator.vue';
 import Thread from './pages/Thread.vue';
@@ -21,6 +22,7 @@ Vue.component('flash', Flash);
 Vue.component('user-notifications', UserNotifications);
 Vue.component('paginator', Paginator);
 Vue.component('thread-view', Thread);
+Vue.component('avatar-form', AvatarForm);
 
 const app = new Vue({
     el: '#app'

@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('header')
+    <link href="{{ asset('css/vendor/jquery.atwho.css') }}" rel="stylesheet">
+@endsection
 @section('content')
     <thread-view inline-template :initial-replies-count="{{$thread->replies_count}}">
         <div class="container">
@@ -8,7 +10,9 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="level">
-                        <span class="flex">
+
+                                <img src="{{$thread->creator->avatar_path}}" width="35" height="35" class="mr-2"/>
+                                <span class="flex">
                         <a href="{{route('profile',$thread->creator->name)}}">{{$thread->creator->name}}</a>
                         Posted
                             </span>
@@ -42,10 +46,11 @@
                     <div class="card">
                         <div class="card-body">
                             <p>This Thread was published {{$thread->created_at->diffForHumans()}} by
-                            <a href="#">{{$thread->creator->name}}</a>
-                            and has <span v-text="repliesCount"></span> {{str_plural('comment',$thread->replies_count)}}
+                                <a href="#">{{$thread->creator->name}}</a>
+                                and has <span
+                                        v-text="repliesCount"></span> {{str_plural('comment',$thread->replies_count)}}
                             </p>
-                                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"></subscribe-button>
+                            <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"></subscribe-button>
                             </p>
                         </div>
                     </div>

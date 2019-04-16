@@ -86,7 +86,7 @@ class ReadThreadsTest extends TestCase
         create('App\Reply',['thread_id'=>$threadWith5Replies->id],5);
         create('App\Reply',['thread_id'=>$threadWith3Replies->id],3);
         $response = $this->getJson('threads?popular=1')->json();
-        $this->assertEquals([5,3,0],array_column($response,'replies_count'));
+        $this->assertEquals([5,3,0],array_column($response['data'],'replies_count'));
     }
     /**
      * @test
@@ -98,7 +98,7 @@ class ReadThreadsTest extends TestCase
 
         create('App\Reply',['thread_id'=>$thread->id]);
         $response = $this->getJson('threads?unanswered=1')->json();
-        $this->assertCount(1,$response);
+        $this->assertCount(1,$response['data']);
     }
 
     /**
