@@ -22,6 +22,10 @@
                 <div class="body">{{$thread->body}}</div>
             </article>
         </div>
+        <div class="card-footer">
+{{--            {{$thread->visits()->count()}} visits--}}
+            {{$thread->visits}} visits
+        </div>
     </div>
 @empty
     <p>Threre is no relevant results at this time</p>

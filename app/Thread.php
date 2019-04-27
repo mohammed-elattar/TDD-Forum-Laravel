@@ -6,6 +6,7 @@ use App\Events\ThreadHasNewReply;
 use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
 use App\Notifications\ThreadWasUpdated;
+use Illuminate\Support\Facades\Redis;
 
 class Thread extends Model
 {
@@ -46,7 +47,8 @@ class Thread extends Model
         return $reply;
     }
 
-    public function notifySubscribers($reply){
+    public function notifySubscribers($reply)
+    {
         $this->subscriptions
             ->where('user_id', '!=', $reply->user_id)
             ->each->notify($reply);
@@ -87,9 +89,14 @@ class Thread extends Model
             ->exists();
     }
 
-    public function hasUpdatesFor($user=null)
+    public function hasUpdatesFor($user = null)
     {
         $key = $user->visitedThreadCacheKey($this);
         return $this->updated_at > cache($key);
     }
+
+//    public function visits()
+//    {
+//        return new Visits($this);
+//    }
 }
