@@ -20,7 +20,14 @@ $factory->define(App\User::class, function (Faker $faker) {
         // 12345678
         'password' => '$2y$10$HyO9XQWTyLk3V7QySaUPtOmRRNSbaNnFXF4y4cH6teMx6h1BRGupC',
         'remember_token' => str_random(10),
+        'confirmed' => true,
     ];
+});
+
+$factory->state(App\User::class,'unconfirmed',function(){
+return [
+  'confirmed'=>false
+];
 });
 
 $factory->define(App\Thread::class, function (Faker $faker) {
