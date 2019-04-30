@@ -109,7 +109,6 @@ class ThreadsController extends Controller
      */
     public function update(Request $request, Thread $thread)
     {
-        //
     }
 
     /**

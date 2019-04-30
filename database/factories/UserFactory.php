@@ -30,6 +30,12 @@ return [
 ];
 });
 
+$factory->state(App\User::class,'administrator',function(){
+return [
+  'name'=>'attar'
+];
+});
+
 $factory->define(App\Thread::class, function (Faker $faker) {
     $title = $faker->sentence();
     return [
@@ -42,7 +48,8 @@ $factory->define(App\Thread::class, function (Faker $faker) {
         'title' => $faker->sentence,
         'body' => $faker->paragraph,
         'visits' => 0,
-        'slug'=>str_slug($title)
+        'slug'=>str_slug($title),
+        'locked'=>false,
     ];
 });
 
