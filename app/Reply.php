@@ -23,7 +23,7 @@ class Reply extends Model
     protected $guarded = [];
 
     protected $with = ['owner','favourites'];
-    protected $appends = ['favouritesCount','isFavourited'];
+    protected $appends = ['favouritesCount','isFavourited','isBest'];
 
     public function owner()
     {
@@ -48,5 +48,13 @@ class Reply extends Model
 
     public function setBodyAttribute($body){
        $this->attributes['body'] = preg_replace('/@([\w\-]+)/','<a href="/profiles/$1">$0</a>', $body);
+    }
+
+    public function isBest(){
+        return $this->thread->best_reply_id == $this->id;
+    }
+
+    public function getIsBestAttribute(){
+        return $this->isBest();
     }
 }

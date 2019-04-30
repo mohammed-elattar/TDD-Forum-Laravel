@@ -61,9 +61,12 @@ class ThreadsController extends Controller
             'user_id' => auth()->id(),
             'channel_id' => $request->channel_id,
             'title' => $request->title,
-            'body' => $request->body,
-            'slug'=>$request->title
+            'body' => $request->body
         ]);
+
+        if(request()->wantsJson()){
+            return response($thread);
+        }
 
         return redirect($thread->path())->with('flash', 'your thread has been published !
         ');
@@ -83,7 +86,6 @@ class ThreadsController extends Controller
 //        $thread->visits()->record();
         $thread->increment('visits');
         $trending->pushTrending($thread);
-
         return view("threads.show", compact('thread'));
     }
 

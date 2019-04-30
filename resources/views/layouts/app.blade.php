@@ -39,7 +39,15 @@
 
         .flex {
             flex: 1;
-            bootstrap
+        }
+        .ml-a{
+            margin-left: auto;
+        }
+        .card-success{
+            background-color: #d6e9c6;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
         }
 
         [v-cloak] {
