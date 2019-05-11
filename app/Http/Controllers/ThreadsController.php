@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Inspections\Spam;
+use App\Rules\Recaptcha;
 use App\Thread;
 
 use App\Trending;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
-use Zttp\Zttp;
+
 
 class ThreadsController extends Controller
 {
@@ -31,7 +32,7 @@ class ThreadsController extends Controller
             return $threads;
         }
         $trending = $trending->get();
-        return view("threads.index", compact("threads","trending"));
+        return view("threads.index", compact("threads", "trending"));
     }
 
     /**
@@ -47,38 +48,27 @@ class ThreadsController extends Controller
     /**
      * @param Request $request
      * @param Spam $spam
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function store(Request $request,Spam $spam)
+    public function store(Spam $spam,Recaptcha $recaptcha)
     {
-        $this->validate($request, [
+        request()->validate([
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
+            'g-recaptcha-response' => ['required', $recaptcha]
         ]);
-        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => $request->input('g-recaptcha-response'),
-            'remoteip' => $_SERVER['REMOTE_ADDR']
-        ]);
-
-        if(!$response->json()['success']){
-            throw new \Exception('Recaptcha Failed');
-        }
-
-
-
 
         $spam->detect(request('body'));
         $thread = Thread::create([
             'user_id' => auth()->id(),
-            'channel_id' => $request->channel_id,
-            'title' => $request->title,
-            'body' => $request->body
+            'channel_id' => request()->channel_id,
+            'title' => request()->title,
+            'body' => request()->body
         ]);
 
-        if(request()->wantsJson()){
+        if (request()->wantsJson()) {
             return response($thread);
         }
 
@@ -115,14 +105,19 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param $channel
+     * @param Thread $thread
+     * @return Thread
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Thread $thread)
+    public function update($channel, Thread $thread)
     {
+        $this->authorize('update',$thread);
+        $thread->update(request()->validate([
+            'title' => 'required|spamfree',
+            'body' => 'required|spamfree'
+        ]));
+        return $thread;
     }
 
     /**

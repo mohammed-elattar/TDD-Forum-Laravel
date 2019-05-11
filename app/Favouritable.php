@@ -8,9 +8,6 @@
 
 namespace App;
 
-
-use function foo\func;
-
 trait Favouritable
 {
 
