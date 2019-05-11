@@ -7,10 +7,11 @@ use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Support\Facades\Redis;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity,Searchable;
     protected $guarded = [];
     protected $with = ['creator', 'channel'];
     protected $casts = ['locked'=>'boolean'];
